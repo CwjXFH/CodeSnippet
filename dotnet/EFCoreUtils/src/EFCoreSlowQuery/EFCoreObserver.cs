@@ -80,7 +80,7 @@ namespace EFCoreSlowQuery
         private void RecordSlowQueryLog(CommandExecutedEventData eventData)
         {
             var msg = $"[EFCoreSlowQuery] duration: {eventData.Duration.Milliseconds}{Environment.NewLine}service: {_options.ServiceName}{Environment.NewLine}SQL: {eventData.Command.CommandText}";
-            _logger.LogWarning(msg);
+            _logger.Log(_options.LogLevel, msg);
         }
 
         private void RecordErrorCommand(object value)

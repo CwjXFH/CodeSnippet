@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace EFCoreSlowQuery
 {
@@ -31,5 +32,7 @@ namespace EFCoreSlowQuery
         }
 
         public bool RecordSlowQueryLog { set; get; } = true;
+
+        public LogLevel LogLevel { set; get; } = LogLevel.Warning;
     }
 }
