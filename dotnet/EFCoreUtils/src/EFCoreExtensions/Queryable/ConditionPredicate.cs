@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace EFCoreExtensions.Queryable
 {
-    public static class EFCoreQueryableExtensions
+    public static partial class EFCoreQueryableExtensions
     {
         /// <summary>
         /// Decide whether to use the predicate based on the condition.
