@@ -9,7 +9,7 @@ namespace EFCoreExtensions.Queryable
     public static partial class EFCoreQueryableExtensions
     {
         /// <summary>
-        /// Asynchronously creates a <see cref="List{T}" /> from an <see cref="IQueryable{T}" /> by enumerating it asynchronously.
+        /// Asynchronously creates a <see cref="List{T}" /> from an <see cref="IQueryable" /> by enumerating it asynchronously.
         /// </summary>
         /// <param name="dataCount">
         /// The number of result set data, which is used to pre-allocate memory to avoid performance and memory
@@ -20,10 +20,14 @@ namespace EFCoreExtensions.Queryable
         public static async Task<List<TSource>> ToListAsync<TSource>(this IQueryable<TSource> source, int dataCount,
             CancellationToken cancellationToken = default)
         {
+            #if NET6_0
+            ArgumentNullException.ThrowIfNull(source, nameof(source));
+            #else
             if (source == null)
             {
                 throw new ArgumentNullException($"{nameof(source)}");
             }
+            #endif
 
             if (source is IAsyncEnumerable<TSource> asyncSource == false)
             {
