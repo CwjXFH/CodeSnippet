@@ -1,3 +1,9 @@
+### 0.0.4
+
+**Date:** 2022-06-13
+
+Configurable log level
+
 ### 0.0.3
 
 **Date:** 2022-02-16  

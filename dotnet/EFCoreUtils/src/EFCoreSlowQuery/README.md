@@ -50,14 +50,7 @@ Also support configure via configuration file:
 }
 ```
 
-v0.0.3
 ```c#
 // will get configuration from config file
-app.UseEFCoreSlowQuery();
-```
-
-v0.0.1/v0.0.2
-```c#
-builder.Services.Configure<EFCoreSlowQueryOptions>(builder.Configuration.GetSection(EFCoreSlowQueryOptions.OptionsName));
 app.UseEFCoreSlowQuery();
 ```

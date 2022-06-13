@@ -20,4 +20,7 @@
     <ProjectReference Include="..\..\src\EFCoreSlowQuery\EFCoreSlowQuery.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <None Remove="WJChi.Net.EFCoreSlowQuery" />
+  </ItemGroup>
 </Project>

@@ -24,6 +24,7 @@ app.UseEFCoreSlowQuery(opt =>
 {
     opt.ServiceName = "DemoApi2";
     opt.SlowQueryThresholdMilliseconds = 20;
+    opt.LogLevel = LogLevel.Error;
 });
 app.MapControllers();
 
