@@ -28,7 +28,7 @@ public class NonQueryTagExpression : TableExpressionBase
 
     protected override Expression VisitChildren(ExpressionVisitor visitor)
     {
-        var tableExpressionBase = (TableExpressionBase) visitor.Visit(_table);
+        var tableExpressionBase = (TableExpressionBase)visitor.Visit(_table);
         if (_table == tableExpressionBase)
         {
             return this;
@@ -37,9 +37,17 @@ public class NonQueryTagExpression : TableExpressionBase
         return new NonQueryTagExpression(_tag, tableExpressionBase);
     }
 
+#if NETSTANDARD2_0
+    public override void Print(ExpressionPrinter expressionPrinter)
+    {
+        throw new System.NotImplementedException();
+    }
+#else
     protected override void Print(ExpressionPrinter expressionPrinter)
     {
         expressionPrinter.Visit(_table);
         expressionPrinter.Append($"-- {_tag}");
     }
+#endif
+
 }
