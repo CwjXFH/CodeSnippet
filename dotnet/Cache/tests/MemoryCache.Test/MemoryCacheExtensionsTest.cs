@@ -5,7 +5,7 @@ namespace MemoryCache.Test
 {
     public class MemoryCacheExtensionsTest
     {
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
         public MemoryCacheExtensionsTest()
         {
             _serviceProvider = new ServiceCollection().AddMemoryCache().BuildServiceProvider();
@@ -16,7 +16,7 @@ namespace MemoryCache.Test
         {
             using var scope = _serviceProvider.CreateScope();
             var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-            var count = 3;
+            const int count = 3;
             for (var i = 0; i < count; i++)
             {
                 memoryCache.Set($"{i}", i);
@@ -47,7 +47,7 @@ namespace MemoryCache.Test
         {
             using var scope = _serviceProvider.CreateScope();
             var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-            var key = "key";
+            const string key = "key";
             memoryCache.Set(key, 1);
 
             var keys = memoryCache.GetAllKeys();
@@ -71,7 +71,7 @@ namespace MemoryCache.Test
         {
             using var scope = _serviceProvider.CreateScope();
             var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-            var key = "key";
+            const string key = "key";
             memoryCache.Set(key, 1);
 
             var keys = memoryCache.GetAllKeys();
@@ -84,7 +84,7 @@ namespace MemoryCache.Test
         {
             using var scope = _serviceProvider.CreateScope();
             var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-            var key = "key";
+            const string key = "key";
             memoryCache.Set(key, 1, TimeSpan.FromSeconds(1));
 
             var keys = memoryCache.GetAllKeys();
@@ -119,5 +119,51 @@ namespace MemoryCache.Test
             Assert.Equal(0, count);
         }
 
+        
+        [Fact]
+        public void Clear_PercentLessThanOrEqualZero_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            memoryCache.Set("1", 1);
+
+            memoryCache.Clear(0.0);
+            var count = memoryCache.KeyCount();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void Clear_PercentGreaterThanOrEqualOne_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            memoryCache.Set("1", 1);
+
+            memoryCache.Clear(1.2);
+            var count = memoryCache.KeyCount();
+
+            Assert.Equal(0, count);
+        }
+
+        [Fact]
+        public void Clear_PercentInRange_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            const int keyCount = 10;
+            for (var i = 0; i < keyCount; i++)
+            {
+                memoryCache.Set(i, i);
+            }
+
+            const double percent = 0.3;
+            memoryCache.Clear(percent);
+            var count = memoryCache.KeyCount();
+            const double excepted = keyCount * (1 - percent);
+
+            Assert.True(excepted >= count);
+        }
+        
     }
 }

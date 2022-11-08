@@ -21,35 +21,55 @@ namespace MemoryCache
         /// </summary>
         public static IDictionary<string, DateTimeOffset?> GetAllKeys(this IMemoryCache memoryCache)
         {
-            var entriesCollection = memoryCache.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
+            var entriesCollection = memoryCache.GetType().GetProperty("EntriesCollection",
+                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
 
 
-            if (entriesCollection is not null and IDictionary cacheDict)
+            if (entriesCollection is not IDictionary cacheDict)
             {
-                var keyInfoDict = new Dictionary<string, DateTimeOffset?>();
-                foreach (DictionaryEntry cache in cacheDict)
-                {
-                    if (cache.Value is ICacheEntry cacheEntry)
-                    {
-                        if (cacheEntry.Key is string cachekey && string.IsNullOrEmpty(cachekey) == false)
-                        {
-                            keyInfoDict[cachekey] = cacheEntry.AbsoluteExpiration;
-                        }
-                    }
-                }
-                return keyInfoDict;
+                return new Dictionary<string, DateTimeOffset?>(0);
             }
 
-            return new Dictionary<string, DateTimeOffset?>(0);
+            var keyInfoDict = new Dictionary<string, DateTimeOffset?>();
+            foreach (DictionaryEntry cache in cacheDict)
+            {
+                if (cache.Value is not ICacheEntry cacheEntry)
+                {
+                    continue;
+                }
+
+                if (cacheEntry.Key is string { Length: > 0 } cacheKey)
+                {
+                    keyInfoDict[cacheKey] = cacheEntry.AbsoluteExpiration;
+                }
+            }
+
+            return keyInfoDict;
         }
 
-        public static void ClearAll(this IMemoryCache memoryCache)
+        public static void ClearAll(this IMemoryCache memoryCache) => memoryCache.Clear(1.0);
+
+        /// <summary>
+        /// Remove at least the given percentage of the total entries (or estimated memory).
+        /// </summary>
+        /// <param name="percent">Valid value range [0,1], beyond the change range will be treated according to the upper/lower limit</param>
+        public static void Clear(this IMemoryCache memoryCache, double percent)
         {
+            if (percent <= 0)
+            {
+                return;
+            }
+
+            if (percent > 1)
+            {
+                percent = 1;
+            }
+
             var compact = memoryCache.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
                 .Where(m => m.Name == "Compact")
                 .FirstOrDefault(m => m.GetParameters().Length == 1);
-            compact?.Invoke(memoryCache, new object[] { 1.0 });
+            compact?.Invoke(memoryCache, new object[] { percent });
         }
     }
 }
