@@ -6,6 +6,10 @@ namespace MemoryCache
 {
     public static class MemoryCacheExtensions
     {
+        /// <summary>
+        /// Get the number of keys that are stored in the memory.
+        /// </summary>
+        /// <returns>-1 if failed, else the number of keys</returns>
         public static int KeyCount(this IMemoryCache memoryCache)
         {
             if (memoryCache.GetType().GetProperty("Count")?.GetValue(memoryCache) is int count)
@@ -19,18 +23,31 @@ namespace MemoryCache
         /// <summary>
         /// Return all memory cache keys, and expired time if it exists.
         /// </summary>
-        public static IDictionary<string, DateTimeOffset?> GetAllKeys(this IMemoryCache memoryCache)
+        public static IDictionary<object, DateTimeOffset?> GetAllKeys(this IMemoryCache memoryCache)
         {
-            var entriesCollection = memoryCache.GetType().GetProperty("EntriesCollection",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
+            var keyCount = memoryCache.KeyCount();
+            return memoryCache.GetKeys(keyCount);
+        }
 
-
-            if (entriesCollection is not IDictionary cacheDict)
+        /// <summary>
+        /// Return specified count memory cache keys, and expired time if it exists.
+        /// </summary>
+        public static IDictionary<object, DateTimeOffset?> GetKeys(this IMemoryCache memoryCache, int count)
+        {
+            if (count <= 0)
             {
-                return new Dictionary<string, DateTimeOffset?>(0);
+                return new Dictionary<object, DateTimeOffset?>();
             }
 
-            var keyInfoDict = new Dictionary<string, DateTimeOffset?>();
+            var entriesCollection = memoryCache.GetType().GetProperty("EntriesCollection",
+                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
+            
+            if (entriesCollection is not IDictionary cacheDict)
+            {
+                return new Dictionary<object, DateTimeOffset?>(0);
+            }
+
+            var keyInfoDict = new Dictionary<object, DateTimeOffset?>();
             foreach (DictionaryEntry cache in cacheDict)
             {
                 if (cache.Value is not ICacheEntry cacheEntry)
@@ -38,15 +55,19 @@ namespace MemoryCache
                     continue;
                 }
 
-                if (cacheEntry.Key is string { Length: > 0 } cacheKey)
+                keyInfoDict[cacheEntry.Key] = cacheEntry.AbsoluteExpiration;
+                if (keyInfoDict.Keys.Count >= count)
                 {
-                    keyInfoDict[cacheKey] = cacheEntry.AbsoluteExpiration;
+                    break;
                 }
             }
 
             return keyInfoDict;
         }
 
+        /// <summary>
+        /// Remove all cache keys
+        /// </summary>
         public static void ClearAll(this IMemoryCache memoryCache) => memoryCache.Clear(1.0);
 
         /// <summary>

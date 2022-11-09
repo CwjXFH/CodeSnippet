@@ -6,10 +6,13 @@ namespace MemoryCache.Test
     public class MemoryCacheExtensionsTest
     {
         private readonly IServiceProvider _serviceProvider;
+
         public MemoryCacheExtensionsTest()
         {
             _serviceProvider = new ServiceCollection().AddMemoryCache().BuildServiceProvider();
         }
+
+        #region KeyCount
 
         [Fact]
         public void KeyCount_HasItems_ReturnTrue()
@@ -39,8 +42,9 @@ namespace MemoryCache.Test
             Assert.Equal(0, keyCount);
         }
 
+        #endregion
 
-
+        #region GetKeys
 
         [Fact]
         public void GetAllKeys_HasItems_ReturnTrue()
@@ -93,6 +97,79 @@ namespace MemoryCache.Test
         }
 
 
+        [Fact]
+        public void GetKeys_Empty_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+
+            var keys = memoryCache.GetKeys(10);
+
+            Assert.Equal(0, keys.Count);
+        }
+
+        [Fact]
+        public void GetKeys_HasItems_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            for (var i = 0; i < 10; i++)
+            {
+                memoryCache.Set(i, i);
+            }
+
+            const int takeCount = 3;
+            var keys = memoryCache.GetKeys(takeCount);
+
+            Assert.Equal(takeCount, keys.Count);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void GetKeys_InputInvalidValue_ReturnTrue(int takeCount)
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            for (var i = 0; i < 10; i++)
+            {
+                memoryCache.Set(i, i);
+            }
+
+            var keys = memoryCache.GetKeys(takeCount);
+
+            Assert.Equal(0, keys.Count);
+        }
+
+        [Fact]
+        public void GetKeys_HasItemWithoutExpire_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            const string key = "key";
+            memoryCache.Set(key, 1);
+
+            var keys = memoryCache.GetKeys(1);
+
+            Assert.Null(keys.First().Value);
+        }
+
+        [Fact]
+        public void GetKeys_HasItemWithExpire_ReturnTrue()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            const string key = "key";
+            memoryCache.Set(key, 1, TimeSpan.FromSeconds(1));
+
+            var keys = memoryCache.GetKeys(1);
+
+            Assert.NotNull(keys.First().Value);
+        }
+
+        #endregion
+        
+        #region Clear
 
         [Fact]
         public void ClearAll_HasItems_ReturnTrue()
@@ -119,7 +196,7 @@ namespace MemoryCache.Test
             Assert.Equal(0, count);
         }
 
-        
+
         [Fact]
         public void Clear_PercentLessThanOrEqualZero_ReturnTrue()
         {
@@ -164,6 +241,7 @@ namespace MemoryCache.Test
 
             Assert.True(excepted >= count);
         }
-        
+
+        #endregion
     }
 }
