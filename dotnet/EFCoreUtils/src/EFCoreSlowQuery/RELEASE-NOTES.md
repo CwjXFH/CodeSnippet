@@ -1,8 +1,9 @@
-### 0.1.0 
+### 1.0.0 
 
-**Date:** 2022-09-07
+**Date:** 2022-11-09
 
 + Support user debug this package
++ Support .NET 7
 
 
 ### 0.0.4

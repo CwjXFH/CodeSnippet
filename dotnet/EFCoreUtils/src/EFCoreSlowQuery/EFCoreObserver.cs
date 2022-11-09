@@ -25,6 +25,7 @@ namespace EFCoreSlowQuery
         }
 
         #region ignores
+
         public void OnCompleted()
         {
         }
@@ -32,13 +33,14 @@ namespace EFCoreSlowQuery
         public void OnError(Exception error)
         {
         }
+
         #endregion
     }
 
 #if NETSTANDARD2_0
     internal class SlowQueryObserver : IObserver<KeyValuePair<string, object>>
 #else
-        internal class SlowQueryObserver : IObserver<KeyValuePair<string, object?>>
+    internal class SlowQueryObserver : IObserver<KeyValuePair<string, object?>>
 #endif
     {
         private readonly ILogger _logger;
@@ -58,7 +60,7 @@ namespace EFCoreSlowQuery
 #if NETSTANDARD2_0
         public void OnNext(KeyValuePair<string, object> value)
 #else
-            public void OnNext(KeyValuePair<string, object?> value)
+        public void OnNext(KeyValuePair<string, object?> value)
 #endif
         {
             if (value.Key == RelationalEventId.CommandExecuted.Name
@@ -77,9 +79,14 @@ namespace EFCoreSlowQuery
         }
 
         #region private
+
         private void RecordSlowQueryLog(CommandExecutedEventData eventData)
         {
-            var msg = $"[EFCoreSlowQuery] duration: {eventData.Duration.Milliseconds}{Environment.NewLine}service: {_options.ServiceName}{Environment.NewLine}SQL: {eventData.Command.CommandText}";
+            var msg =
+                $"[EFCoreSlowQuery] duration: {eventData.Duration.Milliseconds}{Environment.NewLine}" +
+                $"service: {_options.ServiceName}{Environment.NewLine}" +
+                $"SQL: {eventData.Command.CommandText}";
+
             _logger.Log(_options.LogLevel, msg);
         }
 
@@ -95,13 +102,15 @@ namespace EFCoreSlowQuery
                 _logger.LogError("Exec SQL error, and no SQL is captured.");
             }
         }
+
         #endregion
 
         #region ignores
+
         public void OnCompleted()
         {
         }
-        #endregion
 
+        #endregion
     }
 }
