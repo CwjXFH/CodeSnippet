@@ -6,13 +6,17 @@ namespace MemoryCache
 {
     public static class MemoryCacheExtensions
     {
+        private static MemoryCacheVersion CacheVersion = MemoryCacheVersion.None;
+
         /// <summary>
         /// Get the number of keys that are stored in the memory.
         /// </summary>
         /// <returns>-1 if failed, else the number of keys</returns>
         public static int KeyCount(this IMemoryCache memoryCache)
         {
-            if (memoryCache.GetType().GetProperty("Count")?.GetValue(memoryCache) is int count)
+            if (memoryCache.GetType().GetProperty("Count",
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
+                    ?.GetValue(memoryCache) is int count)
             {
                 return count;
             }
@@ -39,9 +43,22 @@ namespace MemoryCache
                 return new Dictionary<object, DateTimeOffset?>();
             }
 
-            var entriesCollection = memoryCache.GetType().GetProperty("EntriesCollection",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
-            
+            var instanceType = memoryCache.GetType();
+            object? entriesCollection = null;
+            var typeVersion = GetMemoryCacheVersion(instanceType);
+            if (typeVersion == MemoryCacheVersion.V6)
+            {
+                entriesCollection = instanceType.GetProperty("EntriesCollection",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
+            }
+            else if (typeVersion == MemoryCacheVersion.V7)
+            {
+                var coherentState = instanceType.GetField("_coherentState",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField)?.GetValue(memoryCache);
+                entriesCollection = coherentState?.GetType().GetProperty("EntriesCollection",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(coherentState);
+            }
+
             if (entriesCollection is not IDictionary cacheDict)
             {
                 return new Dictionary<object, DateTimeOffset?>(0);
@@ -87,10 +104,30 @@ namespace MemoryCache
             }
 
             var compact = memoryCache.GetType()
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
                 .Where(m => m.Name == "Compact")
                 .FirstOrDefault(m => m.GetParameters().Length == 1);
             compact?.Invoke(memoryCache, new object[] { percent });
+        }
+
+        private static MemoryCacheVersion GetMemoryCacheVersion(Type type)
+        {
+            if (CacheVersion != MemoryCacheVersion.None)
+            {
+                return CacheVersion;
+            }
+
+            var assemblyFullName = type.Assembly.FullName;
+            if (string.IsNullOrWhiteSpace(assemblyFullName))
+            {
+                throw new ArgumentException(nameof(type));
+            }
+
+            CacheVersion = assemblyFullName.Contains("Version=6.") ? MemoryCacheVersion.V6 :
+                assemblyFullName.Contains("Version=7.") ? MemoryCacheVersion.V7 :
+                throw new NotSupportedException();
+
+            return CacheVersion;
         }
     }
 }
