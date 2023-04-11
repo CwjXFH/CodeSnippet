@@ -9,4 +9,4 @@ This package has been tested on [Microsoft.Extensions.Caching.Memory](https://ww
 
 ## Release notes
 
-Click [here](https://github.com/CwjXFH/CodeSnippet/blob/master/dotnet/Cache/src/MemoryCache/RELEASE-NOTES.md) for release notes.
+Click [here](https://github.com/CwjXFH/CodeSnippet/blob/master/dotnet/Cache/src/EC.MemoryCache/RELEASE-NOTES.md) for release notes.
