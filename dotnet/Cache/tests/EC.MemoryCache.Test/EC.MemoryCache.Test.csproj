@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <RootNamespace>MemoryCache.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MemoryCache\MemoryCache.csproj" />
+    <ProjectReference Include="..\..\src\EC.MemoryCache\EC.MemoryCache.csproj" />
   </ItemGroup>
 
 </Project>

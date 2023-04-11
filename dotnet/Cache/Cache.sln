@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0CFE7CED-923
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BA2F8C18-D2F4-4FE1-804A-1E8DF81E9947}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCache", "src\MemoryCache\MemoryCache.csproj", "{31521BED-2B33-41F5-A97E-E17CA34D758A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.MemoryCache", "src\EC.MemoryCache\EC.MemoryCache.csproj", "{31521BED-2B33-41F5-A97E-E17CA34D758A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCache.Test", "tests\MemoryCache.Test\MemoryCache.Test.csproj", "{1E32F213-F4BD-4F6F-9FB2-AC58E1D8934F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EC.MemoryCache.Test", "tests\EC.MemoryCache.Test\EC.MemoryCache.Test.csproj", "{1E32F213-F4BD-4F6F-9FB2-AC58E1D8934F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

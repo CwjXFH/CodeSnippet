@@ -3,25 +3,27 @@
   <PropertyGroup>
     <!--<TargetFramework>net6.0</TargetFramework>-->
     <PackageId>EC.Net.Extensions.MemoryCache</PackageId>
-    <Version>$(Version)</Version>
+    <Version>0.1.1</Version>
     <Authors>WenJun Chi</Authors>
     <Description>Extension methods for MemoryCache, which implements IMemoryCache interface.</Description>
     <PackageTags>.NET;MemoryCache</PackageTags>
     <RepositoryUrl>https://github.com/CwjXFH/CodeSnippet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <PackageOutputPath>../../pkgs</PackageOutputPath>
+    <RootNamespace>MemoryCache</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\"/>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   
   <ItemGroup>
