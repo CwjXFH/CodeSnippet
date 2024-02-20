@@ -1,0 +1,3 @@
+@base_url=http://localhost:51170
+
+GET {{base_url}}/info?tag=123

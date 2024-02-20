@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
@@ -37,17 +38,15 @@ public class NonQueryTagExpression : TableExpressionBase
         return new NonQueryTagExpression(_tag, tableExpressionBase);
     }
 
-#if NETSTANDARD2_0
-    public override void Print(ExpressionPrinter expressionPrinter)
-    {
-        throw new System.NotImplementedException();
-    }
-#else
+
     protected override void Print(ExpressionPrinter expressionPrinter)
     {
         expressionPrinter.Visit(_table);
         expressionPrinter.Append($"-- {_tag}");
     }
-#endif
 
+    protected override TableExpressionBase CreateWithAnnotations(IEnumerable<IAnnotation> annotations)
+    {
+        throw new NotImplementedException();
+    }
 }

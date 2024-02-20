@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace EFCoreSlowQuery
@@ -37,11 +35,7 @@ namespace EFCoreSlowQuery
         #endregion
     }
 
-#if NETSTANDARD2_0
-    internal class SlowQueryObserver : IObserver<KeyValuePair<string, object>>
-#else
     internal class SlowQueryObserver : IObserver<KeyValuePair<string, object?>>
-#endif
     {
         private readonly ILogger _logger;
         private readonly EFCoreSlowQueryOptions _options;
@@ -57,11 +51,7 @@ namespace EFCoreSlowQuery
             _logger.LogError(error, "An exception occurred.");
         }
 
-#if NETSTANDARD2_0
-        public void OnNext(KeyValuePair<string, object> value)
-#else
         public void OnNext(KeyValuePair<string, object?> value)
-#endif
         {
             if (value.Key == RelationalEventId.CommandExecuted.Name
                 && value.Value is CommandExecutedEventData eventData
@@ -90,7 +80,7 @@ namespace EFCoreSlowQuery
             _logger.Log(_options.LogLevel, msg);
         }
 
-        private void RecordErrorCommand(object value)
+        private void RecordErrorCommand(object? value)
         {
             if (value is CommandErrorEventData errorEventData)
             {

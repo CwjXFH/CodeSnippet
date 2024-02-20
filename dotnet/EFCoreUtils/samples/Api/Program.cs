@@ -23,7 +23,7 @@ var app = builder.Build();
 app.UseEFCoreSlowQuery(opt =>
 {
     opt.ServiceName = "DemoApi2";
-    opt.SlowQueryThresholdMilliseconds = 20;
+    opt.SlowQueryThresholdMilliseconds = 10;
     opt.LogLevel = LogLevel.Error;
 });
 app.MapControllers();

@@ -1,38 +1,38 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
 
-namespace EFCoreSlowQuery
+namespace EFCoreSlowQuery;
+
+public class EFCoreSlowQueryOptions
 {
-    public class EFCoreSlowQueryOptions
+    public static readonly EFCoreSlowQueryOptions DefaultOptions = new();
+
+    /// <summary>
+    /// The section name in configures file, like appsettings.json.
+    /// </summary>
+    public const string OptionsName = "EFCoreSlowQuery";
+
+    public string ServiceName { set; get; } = "";
+
+    private int _slowQueryThresholdMilliseconds = 100;
+
+    /// <summary>
+    /// If the SQL execution time is greater than this value, the SQL will record in slow query log.
+    /// </summary>
+    public int SlowQueryThresholdMilliseconds
     {
-        public static readonly EFCoreSlowQueryOptions DefaultOptions = new EFCoreSlowQueryOptions();
-        /// <summary>
-        /// The section name in configures file, like appsettings.json.
-        /// </summary>
-        public const string OptionsName = "EFCoreSlowQuery";
-
-        public string ServiceName { set; get; } = "";
-
-        private int _slowQueryThresholdMilliseconds = 100;
-        /// <summary>
-        /// If the SQL execution time is greater than this value, the SQL will record in slow query log.
-        /// </summary>
-        public int SlowQueryThresholdMilliseconds
+        set
         {
-            set
+            if (value <= 0)
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException($"{nameof(SlowQueryThresholdMilliseconds)}", "Value must be greater than 0.");
-                }
-
-                _slowQueryThresholdMilliseconds = value;
+                throw new ArgumentOutOfRangeException($"{nameof(SlowQueryThresholdMilliseconds)}", "Value must be greater than 0.");
             }
-            get => _slowQueryThresholdMilliseconds;
+
+            _slowQueryThresholdMilliseconds = value;
         }
-
-        public bool RecordSlowQueryLog { set; get; } = true;
-
-        public LogLevel LogLevel { set; get; } = LogLevel.Warning;
+        get => _slowQueryThresholdMilliseconds;
     }
+
+    public bool RecordSlowQueryLog { set; get; } = true;
+
+    public LogLevel LogLevel { set; get; } = LogLevel.Warning;
 }
