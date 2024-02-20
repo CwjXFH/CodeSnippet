@@ -67,7 +67,7 @@ public class MemoryCacheExtensionsTest
 
         var keys = memoryCache.GetAllKeys();
 
-        Assert.Equal(0, keys.Count);
+        Assert.Empty(keys);
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class MemoryCacheExtensionsTest
 
         var keys = memoryCache.GetKeys(10);
 
-        Assert.Equal(0, keys.Count);
+        Assert.Empty(keys);
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class MemoryCacheExtensionsTest
 
         var keys = memoryCache.GetKeys(takeCount);
 
-        Assert.Equal(0, keys.Count);
+        Assert.Empty(keys);
     }
 
     [Fact]
