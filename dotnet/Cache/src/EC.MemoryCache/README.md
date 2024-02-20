@@ -4,9 +4,25 @@ Extension methods for [MemoryCache](https://learn.microsoft.com/en-us/dotnet/api
 
 These extension methods used some internal members of MemoryCache, these members may be changed in different versions, so these extension does not promise to work for different MemoryCache.
 
-This package has been tested on [Microsoft.Extensions.Caching.Memory](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Memory/7.0.0) v6.0.0+ and v7.0.0.
-
 
 ## Release notes
 
 Click [here](https://github.com/CwjXFH/CodeSnippet/blob/master/dotnet/Cache/src/EC.MemoryCache/RELEASE-NOTES.md) for release notes.
+
+
+## Demo
+
+```c#
+public class CacheService(IMemoryCache memoryCache)
+{
+    public object? Get(string key) => memoryCache.TryGetValue(key, out var val) ? val : "null";
+
+    public int Count() => memoryCache.KeyCount();
+
+    public IDictionary<object, DateTimeOffset?> Keys() => memoryCache.GetAllKeys();
+
+    public void Remove(string key) => memoryCache.Remove(key);
+
+    public void Clear() => memoryCache.ClearAll();
+}
+```

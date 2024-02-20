@@ -50,7 +50,7 @@ public static class MemoryCacheExtensions
             entriesCollection = instanceType.GetProperty("EntriesCollection",
                 BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
         }
-        else if (typeVersion == MemoryCacheVersion.V7)
+        else if (typeVersion is MemoryCacheVersion.V7 or MemoryCacheVersion.V8)
         {
             var coherentState = instanceType.GetField("_coherentState",
                 BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField)?.GetValue(memoryCache);
@@ -124,6 +124,7 @@ public static class MemoryCacheExtensions
 
         _cacheVersion = assemblyFullName.Contains("Version=6.") ? MemoryCacheVersion.V6 :
             assemblyFullName.Contains("Version=7.") ? MemoryCacheVersion.V7 :
+            assemblyFullName.Contains("Version=8.") ? MemoryCacheVersion.V8 :
             throw new NotSupportedException();
 
         return _cacheVersion;

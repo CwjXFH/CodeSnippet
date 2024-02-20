@@ -13,7 +13,12 @@ internal enum MemoryCacheVersion
     V6 = 1,
 
     /// <summary>
-    /// 大版本号是7
+    /// Major version is 7
     /// </summary>
-    V7 = 10
+    V7 = 10,
+    
+    /// <summary>
+    /// Major version is 8
+    /// </summary>
+    V8 = 20
 }
