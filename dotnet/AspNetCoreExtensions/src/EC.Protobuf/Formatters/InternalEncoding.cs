@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Protobuf.Formatters;
+namespace EC.Protobuf.Formatters;
 
 internal static class InternalEncoding
 {

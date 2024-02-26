@@ -1,10 +1,10 @@
 ﻿using System.Text;
+using EC.Protobuf.Constants;
 using Google.Protobuf.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Protobuf.Constants;
 
-namespace Protobuf.Formatters;
+namespace EC.Protobuf.Formatters;
 
 internal class ProtobufInputFormatter : TextInputFormatter
 {

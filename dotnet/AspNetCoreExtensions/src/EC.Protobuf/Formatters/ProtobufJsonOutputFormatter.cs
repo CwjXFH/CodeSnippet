@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using System.Text.Json;
+using EC.Protobuf.Constants;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Protobuf.Constants;
 
-namespace Protobuf.Formatters;
+namespace EC.Protobuf.Formatters;
 
 internal class ProtobufJsonOutputFormatter : TextOutputFormatter
 {
@@ -13,7 +13,7 @@ internal class ProtobufJsonOutputFormatter : TextOutputFormatter
         base.SupportedEncodings.Add(InternalEncoding.UTF8NoBOM);
         base.SupportedEncodings.Add(InternalEncoding.UTF8WithBOM);
         base.SupportedEncodings.Add(Encoding.Unicode);
-        base.SupportedMediaTypes.Add(HttpContentType.Application.Json);
+        base.SupportedMediaTypes.Add(HttpContentType.Application.ProtobufJson);
     }
 
 

@@ -1,9 +1,9 @@
 ﻿using System.Text;
+using EC.Protobuf.Constants;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Protobuf.Constants;
 
-namespace Protobuf.Formatters;
+namespace EC.Protobuf.Formatters;
 
 internal class ProtobufOutputFormatter : TextOutputFormatter
 {

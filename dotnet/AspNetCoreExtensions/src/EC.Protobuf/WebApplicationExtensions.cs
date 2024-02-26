@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using EC.Protobuf.Formatters;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Protobuf.Formatters;
 
-namespace Protobuf;
+namespace EC.Protobuf;
 
 public static class WebApplicationExtensions
 {
@@ -12,7 +12,7 @@ public static class WebApplicationExtensions
         ProtobufJsonFormatter.RegistryMessageDescriptor();
         mvcOpts ??= opt =>
         {
-            opt.InputFormatters.Clear();
+            // opt.InputFormatters.Clear();
             opt.InputFormatters.Add(new ProtobufInputFormatter());
             opt.InputFormatters.Add(new ProtobufJsonInputFormatter());
 
