@@ -27,9 +27,9 @@ internal class ProtobufJsonInputFormatter : TextInputFormatter
         {
             object? model;
             using var reader = new StreamReader(inputStream, encoding);
-            if (ProtobufJsonFormatter.TypeMessageDescriptorMap.TryGetValue(context.ModelType.FullName!, out MessageDescriptor? messageDescriptor))
+            if (ProtobufMessageDescriptorRegister.TypeMessageDescriptorMap.TryGetValue(context.ModelType.FullName!, out MessageDescriptor? messageDescriptor))
             {
-                model = ProtobufJsonFormatter.JsonParser.Parse(reader, messageDescriptor);
+                model = ProtobufMessageDescriptorRegister.JsonParser.Parse(reader, messageDescriptor);
             }
             else
             {

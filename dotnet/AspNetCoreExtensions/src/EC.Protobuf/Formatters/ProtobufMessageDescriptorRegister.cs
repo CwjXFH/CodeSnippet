@@ -7,7 +7,7 @@ namespace EC.Protobuf.Formatters;
 /// <summary>
 /// Convert <see cref="IMessage"/> to JSON format
 /// </summary>
-public static class ProtobufJsonFormatter
+internal static class ProtobufMessageDescriptorRegister
 {
     private static JsonFormatter _jsonFormatter = JsonFormatter.Default;
     private static JsonParser _jsonParser = JsonParser.Default;
@@ -26,8 +26,11 @@ public static class ProtobufJsonFormatter
         var entryAssembly = Assembly.GetEntryAssembly() ?? throw new ApplicationException("Cannot get entry assembly");
         var referencedAssemblies = entryAssembly.GetReferencedAssemblies();
 
+        var assemblies = new List<AssemblyName> { entryAssembly.GetName() };
+        assemblies.AddRange(referencedAssemblies);
+
         var allDescriptorList = new List<MessageDescriptor>();
-        foreach (var assemblyName in referencedAssemblies)
+        foreach (var assemblyName in assemblies)
         {
             var assembly = Assembly.Load(assemblyName);
             var descriptorList = RegistryMessageDescriptorCore(assembly);

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package Api.Models;
+
+message Animal { 
+  string name = 1;
+  uint32 age = 2;
+}
+
+message PetPark {
+  repeated Animal dogs = 1;
+}

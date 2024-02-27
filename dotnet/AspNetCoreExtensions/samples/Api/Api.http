@@ -1,0 +1,31 @@
+@Api_HostAddress = http://localhost:5179
+
+###
+HEAD {{Api_HostAddress}}/health/
+
+###
+POST {{Api_HostAddress}}/home/demo/
+Content-Type: application/json
+
+{
+  "dogs": [
+    {
+      "name": "d1",
+      "age": 3
+    }
+  ]
+}
+
+###
+POST {{Api_HostAddress}}/home/demo/
+Content-Type: application/x-protobuf-json
+Accept: application/x-protobuf-json
+
+{
+  "dogs": [
+    {
+      "name": "d1",
+      "age": 3
+    }
+  ]
+}
