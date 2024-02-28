@@ -29,7 +29,7 @@ internal class ProtobufJsonOutputFormatter : TextOutputFormatter
             if (context.Object is IMessage)
             {
                 await using var writer = new StreamWriter(responseStream, selectedEncoding);
-                ProtobufMessageDescriptorRegister.JsonFormatter.WriteValue(writer, context.Object);
+                ProtobufJsonFormatter.JsonFormatter.WriteValue(writer, context.Object);
             }
             else
             {
@@ -49,7 +49,7 @@ internal class ProtobufJsonOutputFormatter : TextOutputFormatter
             if (context.Object is IMessage)
             {
                 transcodingWriter = new StreamWriter(transcodingStream, selectedEncoding);
-                ProtobufMessageDescriptorRegister.JsonFormatter.WriteValue(transcodingWriter, context.Object);
+                ProtobufJsonFormatter.JsonFormatter.WriteValue(transcodingWriter, context.Object);
             }
             else
             {

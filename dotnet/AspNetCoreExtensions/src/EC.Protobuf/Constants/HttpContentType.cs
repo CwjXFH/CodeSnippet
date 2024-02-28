@@ -1,6 +1,6 @@
 ﻿namespace EC.Protobuf.Constants;
 
-internal static class HttpContentType
+public static class HttpContentType
 {
     public static class Application
     {

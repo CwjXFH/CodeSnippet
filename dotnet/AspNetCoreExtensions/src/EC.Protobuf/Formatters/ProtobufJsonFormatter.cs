@@ -7,7 +7,7 @@ namespace EC.Protobuf.Formatters;
 /// <summary>
 /// Convert <see cref="IMessage"/> to JSON format
 /// </summary>
-internal static class ProtobufMessageDescriptorRegister
+public static class ProtobufJsonFormatter
 {
     private static JsonFormatter _jsonFormatter = JsonFormatter.Default;
     private static JsonParser _jsonParser = JsonParser.Default;
@@ -15,13 +15,14 @@ internal static class ProtobufMessageDescriptorRegister
 
     public static JsonFormatter JsonFormatter => _jsonFormatter;
     public static JsonParser JsonParser => _jsonParser;
-    public static IReadOnlyDictionary<string, MessageDescriptor> TypeMessageDescriptorMap => TypeMsgDescriptorMap;
-
+    
+    
+    internal static IReadOnlyDictionary<string, MessageDescriptor> TypeMessageDescriptorMap => TypeMsgDescriptorMap;
     /// <summary>
     /// Register <see cref="MessageDescriptor"/> into <see cref="JsonFormatter"/> ，used to convert <see cref="IMessage"/> to JSON format
     /// </summary>
     /// <exception cref="ApplicationException">Cannot get the entry point in the assembly</exception>
-    public static void RegistryMessageDescriptor()
+    internal static void RegistryMessageDescriptor()
     {
         var entryAssembly = Assembly.GetEntryAssembly() ?? throw new ApplicationException("Cannot get entry assembly");
         var referencedAssemblies = entryAssembly.GetReferencedAssemblies();

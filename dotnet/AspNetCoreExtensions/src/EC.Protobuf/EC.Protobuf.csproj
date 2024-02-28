@@ -6,7 +6,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>WenJun Chi</Authors>
         <Description>ASP.NET Core Protobuf formatter</Description>
-        <PackageTags>AspNetCore;Protobuf</PackageTags>
+        <PackageTags>AspNetCore;ASP.NET Core;Protobuf</PackageTags>
         <RepositoryUrl>https://github.com/CwjXFH/CodeSnippet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackRelease>true</PackRelease>
@@ -19,6 +19,13 @@
         <PackageOutputPath>../../pkgs</PackageOutputPath>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App"/>
     </ItemGroup>
@@ -28,7 +35,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.25.3" />
+        <PackageReference Include="Google.Protobuf" Version="3.25.3"/>
     </ItemGroup>
 
 </Project>

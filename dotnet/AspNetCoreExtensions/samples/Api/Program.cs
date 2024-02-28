@@ -2,6 +2,7 @@ using EC.Protobuf;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// add protobuf formatter
 builder.AddProtobufFormatters();
 builder.Services.AddHealthChecks();
 
