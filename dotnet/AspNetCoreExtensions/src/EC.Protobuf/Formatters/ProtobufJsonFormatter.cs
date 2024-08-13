@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using EC.Protobuf.Exceptions;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 
@@ -15,8 +16,8 @@ public static class ProtobufJsonFormatter
 
     public static JsonFormatter JsonFormatter => _jsonFormatter;
     public static JsonParser JsonParser => _jsonParser;
-    
-    
+
+
     internal static IReadOnlyDictionary<string, MessageDescriptor> TypeMessageDescriptorMap => TypeMsgDescriptorMap;
     /// <summary>
     /// Register <see cref="MessageDescriptor"/> into <see cref="JsonFormatter"/> ，used to convert <see cref="IMessage"/> to JSON format
@@ -24,7 +25,7 @@ public static class ProtobufJsonFormatter
     /// <exception cref="ApplicationException">Cannot get the entry point in the assembly</exception>
     internal static void RegistryMessageDescriptor()
     {
-        var entryAssembly = Assembly.GetEntryAssembly() ?? throw new ApplicationException("Cannot get entry assembly");
+        var entryAssembly = Assembly.GetEntryAssembly() ?? throw new NotFoundEntryAssemblyException("Cannot get entry assembly");
         var referencedAssemblies = entryAssembly.GetReferencedAssemblies();
 
         var assemblies = new List<AssemblyName> { entryAssembly.GetName() };

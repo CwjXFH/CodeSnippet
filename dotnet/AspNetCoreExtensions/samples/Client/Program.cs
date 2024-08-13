@@ -40,7 +40,9 @@ async Task<Animal> ProtobufJsonReqAsync(PetPark request)
     using var content = new StringContent(jsonTxt);
     content.Headers.ContentType = new MediaTypeHeaderValue(HttpContentType.Application.ProtobufJson);
 
+#pragma warning disable S1075 // URIs should not be hardcoded
     using var response = await client.PostAsync("http://localhost:5179/home/demo", content);
+#pragma warning restore S1075 // URIs should not be hardcoded
     var respTxt = await response.Content.ReadAsStringAsync();
     return ProtobufJsonFormatter.JsonParser.Parse<Animal>(respTxt);
 }
@@ -54,7 +56,9 @@ async Task<Animal> ProtobufReqAsync(PetPark request)
     using var content = new StreamContent(stream);
     content.Headers.ContentType = new MediaTypeHeaderValue(HttpContentType.Application.Protobuf);
 
+#pragma warning disable S1075 // URIs should not be hardcoded
     using var response = await client.PostAsync("http://localhost:5179/home/demo", content);
+#pragma warning restore S1075 // URIs should not be hardcoded
     await using var respStream = await response.Content.ReadAsStreamAsync();
     return Animal.Parser.ParseFrom(respStream);
 }

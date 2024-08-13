@@ -7,13 +7,14 @@ namespace EFCoreExtensions.Queryable;
 
 public class NonQueryTagExpression : TableExpressionBase
 {
-    private readonly string _tag = "";
+    private readonly string _tag;
     private readonly TableExpressionBase _table;
 
     public NonQueryTagExpression(string tag)
         : base(tag)
     {
         _tag = tag;
+        _table = default!;
     }
 
     public NonQueryTagExpression(string tag, TableExpressionBase table)
@@ -23,9 +24,6 @@ public class NonQueryTagExpression : TableExpressionBase
         _table = table;
     }
 
-    // public NonQueryTagExpression(string? alias) : base(alias)
-    // {
-    // }
 
     protected override Expression VisitChildren(ExpressionVisitor visitor)
     {

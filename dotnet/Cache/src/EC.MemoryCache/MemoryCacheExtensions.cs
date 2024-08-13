@@ -45,6 +45,7 @@ public static class MemoryCacheExtensions
         var instanceType = memoryCache.GetType();
         object? entriesCollection = null;
         var typeVersion = GetMemoryCacheVersion(instanceType);
+#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
         if (typeVersion == MemoryCacheVersion.V6)
         {
             entriesCollection = instanceType.GetProperty("EntriesCollection",
@@ -57,6 +58,7 @@ public static class MemoryCacheExtensions
             entriesCollection = coherentState?.GetType().GetProperty("EntriesCollection",
                 BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(coherentState);
         }
+#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
 
         if (entriesCollection is not IDictionary cacheDict)
         {
@@ -106,7 +108,7 @@ public static class MemoryCacheExtensions
             .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
             .Where(m => m.Name == "Compact")
             .FirstOrDefault(m => m.GetParameters().Length == 1);
-        compact?.Invoke(memoryCache, new object[] { percent });
+        compact?.Invoke(memoryCache, [percent]);
     }
 
     private static MemoryCacheVersion GetMemoryCacheVersion(Type type)
@@ -122,10 +124,12 @@ public static class MemoryCacheExtensions
             throw new ArgumentException(nameof(type));
         }
 
+#pragma warning disable S3358 // Ternary operators should not be nested
         _cacheVersion = assemblyFullName.Contains("Version=6.") ? MemoryCacheVersion.V6 :
             assemblyFullName.Contains("Version=7.") ? MemoryCacheVersion.V7 :
             assemblyFullName.Contains("Version=8.") ? MemoryCacheVersion.V8 :
             throw new NotSupportedException();
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         return _cacheVersion;
     }

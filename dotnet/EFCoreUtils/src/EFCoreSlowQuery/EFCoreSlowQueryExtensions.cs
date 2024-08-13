@@ -34,7 +34,9 @@ namespace EFCoreSlowQuery
         {
             if (optionsAction == null)
             {
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one 
                 throw new ArgumentNullException();
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             }
             var options = new EFCoreSlowQueryOptions();
             optionsAction.Invoke(options);
@@ -50,7 +52,9 @@ namespace EFCoreSlowQuery
             var loggerFactory = app.ApplicationServices.GetService<ILoggerFactory>();
             if (loggerFactory == null)
             {
+#pragma warning disable S112 // General or reserved exceptions should never be thrown
                 throw new NullReferenceException($"Cannot resolve {nameof(ILoggerFactory)} type from IoC container.");
+#pragma warning restore S112 // General or reserved exceptions should never be thrown
             }
             var logger = loggerFactory.CreateLogger($"{nameof(EFCoreSlowQueryExtensions)}");
 

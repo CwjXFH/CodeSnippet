@@ -7,9 +7,9 @@ namespace Api.Database;
 public class InfoEntity
 {
     [Key]
-    public int Id { set; get; }
+    public required int Id { set; get; }
 
     [Required]
     [Column(TypeName = "NVARCHAR(20)")]
-    public string Tag { set; get; }
+    public string Tag { set; get; } = "";
 }

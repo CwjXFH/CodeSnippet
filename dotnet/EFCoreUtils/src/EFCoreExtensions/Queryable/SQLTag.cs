@@ -19,11 +19,11 @@ namespace EFCoreExtensions.Queryable
 
         private static readonly Regex QueryTagExtractor =
             new Regex($@"{QueryTagHead}(?<{QueryTagRegexGroupName}>\w+){QueryTagTail}");
-        
+
         private static readonly MethodInfo NonQueryTagWithMethodInfo = typeof(EFCoreQueryableExtensions)
             .GetMethods(BindingFlags.Static | BindingFlags.Public)
-            .Single(mi => mi.Name == nameof(NonQueryTagWith) && mi.IsGenericMethod && mi.GetParameters().Select(p=>p.ParameterType)
-                              .SequenceEqual(new [] {typeof(IQueryable<>).MakeGenericType(mi.GetGenericArguments()), typeof(string)}));
+            .Single(mi => mi.Name == nameof(NonQueryTagWith) && mi.IsGenericMethod && mi.GetParameters().Select(p => p.ParameterType)
+                              .SequenceEqual(new[] { typeof(IQueryable<>).MakeGenericType(mi.GetGenericArguments()), typeof(string) }));
 
         /// <summary>
         /// Add a query tag to the generated SQL. The tag recommends only contains letters, numbers, or underlines.
@@ -33,7 +33,9 @@ namespace EFCoreExtensions.Queryable
         {
             if (queryable is not EntityQueryProvider)
             {
-                throw new ArgumentException($"Parameter must be {typeof(EntityQueryProvider)} type.",nameof(queryable));
+#pragma warning disable EF1001 // Internal EF Core API usage.
+                throw new ArgumentException($"Parameter must be {typeof(EntityQueryProvider)} type.", nameof(queryable));
+#pragma warning restore EF1001 // Internal EF Core API usage.
             }
             tag = FormatTag(tag);
             return queryable.TagWith(tag);
@@ -43,27 +45,32 @@ namespace EFCoreExtensions.Queryable
         /// Add a tag for DELETE, INSERT and UPDATE operation. The tag recommends only contains letters, numbers, or underlines.
         /// </summary>
         public static DbSet<T> NonQueryTagWith<T>(this DbSet<T> dbSet, string tag)
-            where T: class
+            where T : class
         {
-            tag = FormatTag(tag);
-            var queryable = (IQueryable<T>) dbSet;
-            
+
+#pragma warning disable S125 // Sections of code should not be commented out
+            // tag = FormatTag(tag);
+            // var queryable = (IQueryable<T>)dbSet;
+
             // Expression.Call(dbContext)
             throw new NotImplementedException();
+#pragma warning restore S125 // Sections of code should not be commented out
         }
 
         public static IQueryable<T> NonQueryTagWith<T>(this IQueryable<T> queryable, string tag)
         {
             if (queryable is not EntityQueryProvider)
             {
-                throw new ArgumentException($"Parameter must be {typeof(EntityQueryProvider)} type.",nameof(queryable));
+#pragma warning disable EF1001 // Internal EF Core API usage.
+                throw new ArgumentException($"Parameter must be {typeof(EntityQueryProvider)} type.", nameof(queryable));
+#pragma warning restore EF1001 // Internal EF Core API usage.
             }
-            
+
             tag = FormatTag(tag);
-            
-            MethodCallExpression methodCallExpression = Expression.Call((Expression) null, NonQueryTagWithMethodInfo.MakeGenericMethod(typeof (T)), 
+
+            MethodCallExpression methodCallExpression = Expression.Call((Expression)null!, NonQueryTagWithMethodInfo.MakeGenericMethod(typeof(T)),
                 queryable.Expression, new NonQueryTagExpression(tag));
-            return queryable.Provider.CreateQuery<T>((Expression) methodCallExpression);
+            return queryable.Provider.CreateQuery<T>((Expression)methodCallExpression);
         }
 
         /// <summary>
@@ -71,7 +78,9 @@ namespace EFCoreExtensions.Queryable
         /// </summary>
         public static string ExtractFirstTag(this string sql)
         {
+#pragma warning disable S1481 // Unused local variables should be removed
             var match = QueryTagExtractor.Match(sql);
+#pragma warning restore S1481 // Unused local variables should be removed
 
 #if NET6_0
             return match.Groups.TryGetValue(QueryTagRegexGroupName, out var group) ? group.Value ?? "" : "";

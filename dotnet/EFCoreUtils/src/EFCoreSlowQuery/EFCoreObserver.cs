@@ -85,7 +85,7 @@ namespace EFCoreSlowQuery
             if (value is CommandErrorEventData errorEventData)
             {
                 _logger.LogError(errorEventData.Exception,
-                    $"Exec SQL error, SQL: {errorEventData.Command.CommandText}");
+                    "Exec SQL error, SQL: {SQL}", errorEventData.Command.CommandText);
             }
             else
             {

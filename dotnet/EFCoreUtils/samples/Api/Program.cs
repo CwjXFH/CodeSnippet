@@ -10,15 +10,18 @@ builder.Services.AddDbContext<InfoDbContext>(opt =>
 {
     opt.UseSqlServer("Server=localhost;Database=Demo;User ID=sa;Password=Docker2022!;Trusted_Connection=SSPI;Integrated Security=false;Encrypt=false;TrustServerCertificate=true");
 });
-//builder.Services.Configure<EFCoreSlowQueryOptions>(builder.Configuration.GetSection(EFCoreSlowQueryOptions.OptionsName));
 
+#pragma warning disable S125 // Sections of code should not be commented out
+// builder.Services.Configure<EFCoreSlowQueryOptions>(builder.Configuration.GetSection(EFCoreSlowQueryOptions.OptionsName));
+#pragma warning restore S125 // Sections of code should not be commented out
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
 // Configure via configuration file
-//app.UseEFCoreSlowQuery();
+#pragma warning disable S125 // Sections of code should not be commented out
+// app.UseEFCoreSlowQuery();
+#pragma warning restore S125 // Sections of code should not be commented out
+
 // Configuration via code
 app.UseEFCoreSlowQuery(opt =>
 {
@@ -26,6 +29,7 @@ app.UseEFCoreSlowQuery(opt =>
     opt.SlowQueryThresholdMilliseconds = 10;
     opt.LogLevel = LogLevel.Error;
 });
+
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

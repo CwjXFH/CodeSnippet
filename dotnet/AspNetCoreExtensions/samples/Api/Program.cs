@@ -9,4 +9,4 @@ builder.Services.AddHealthChecks();
 var app = builder.Build();
 app.UseRouting().UseHealthChecks("/health");
 app.MapControllers();
-app.Run();
+await app.RunAsync();
