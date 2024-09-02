@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace EC.Protobuf.Formatters;
 
-internal class ProtobufJsonOutputFormatter : TextOutputFormatter
+public class ProtobufJsonOutputFormatter : TextOutputFormatter
 {
     public ProtobufJsonOutputFormatter()
     {
@@ -14,6 +14,11 @@ internal class ProtobufJsonOutputFormatter : TextOutputFormatter
         base.SupportedEncodings.Add(InternalEncoding.UTF8WithBOM);
         base.SupportedEncodings.Add(Encoding.Unicode);
         base.SupportedMediaTypes.Add(HttpContentType.Application.ProtobufJson);
+    }
+
+    public ProtobufJsonOutputFormatter(string mediaType) : this()
+    {
+        base.SupportedMediaTypes.Add(mediaType);
     }
 
 

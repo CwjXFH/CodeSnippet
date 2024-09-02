@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace EC.Protobuf.Formatters;
 
-internal class ProtobufOutputFormatter : TextOutputFormatter
+public class ProtobufOutputFormatter : TextOutputFormatter
 {
     public ProtobufOutputFormatter()
     {
@@ -13,6 +13,11 @@ internal class ProtobufOutputFormatter : TextOutputFormatter
         base.SupportedEncodings.Add(InternalEncoding.UTF8WithBOM);
         base.SupportedEncodings.Add(Encoding.Unicode);
         base.SupportedMediaTypes.Add(HttpContentType.Application.Protobuf);
+    }
+
+    public ProtobufOutputFormatter(string mediaType) : this()
+    {
+        base.SupportedMediaTypes.Add(mediaType);
     }
 
 

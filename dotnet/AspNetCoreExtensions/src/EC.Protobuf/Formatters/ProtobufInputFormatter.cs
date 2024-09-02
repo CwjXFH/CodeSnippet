@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace EC.Protobuf.Formatters;
 
-internal class ProtobufInputFormatter : TextInputFormatter
+public class ProtobufInputFormatter : TextInputFormatter
 {
     public ProtobufInputFormatter()
     {
@@ -14,6 +14,11 @@ internal class ProtobufInputFormatter : TextInputFormatter
         base.SupportedEncodings.Add(InternalEncoding.UTF8WithBOM);
         base.SupportedEncodings.Add(Encoding.Unicode);
         base.SupportedMediaTypes.Add(HttpContentType.Application.Protobuf);
+    }
+
+    public ProtobufInputFormatter(string mediaType) : this()
+    {
+        base.SupportedMediaTypes.Add(mediaType);
     }
 
 
