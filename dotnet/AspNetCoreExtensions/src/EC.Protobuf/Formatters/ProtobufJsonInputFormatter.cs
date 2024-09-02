@@ -17,9 +17,12 @@ public class ProtobufJsonInputFormatter : TextInputFormatter
         base.SupportedMediaTypes.Add(HttpContentType.Application.ProtobufJson);
     }
 
-    public ProtobufJsonInputFormatter(string mediaType) : this()
+    public ProtobufJsonInputFormatter(IEnumerable<string> mediaTypes) : this()
     {
-        base.SupportedMediaTypes.Add(mediaType);
+        foreach (var type in mediaTypes)
+        {
+            base.SupportedMediaTypes.Add(type);
+        }
     }
 
 

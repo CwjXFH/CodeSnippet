@@ -15,9 +15,12 @@ public class ProtobufOutputFormatter : TextOutputFormatter
         base.SupportedMediaTypes.Add(HttpContentType.Application.Protobuf);
     }
 
-    public ProtobufOutputFormatter(string mediaType) : this()
+    public ProtobufOutputFormatter(IEnumerable<string> mediaTypes) : this()
     {
-        base.SupportedMediaTypes.Add(mediaType);
+        foreach (var type in mediaTypes)
+        {
+            base.SupportedMediaTypes.Add(type);
+        }
     }
 
 

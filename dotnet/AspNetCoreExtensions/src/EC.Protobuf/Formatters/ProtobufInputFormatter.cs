@@ -16,9 +16,12 @@ public class ProtobufInputFormatter : TextInputFormatter
         base.SupportedMediaTypes.Add(HttpContentType.Application.Protobuf);
     }
 
-    public ProtobufInputFormatter(string mediaType) : this()
+    public ProtobufInputFormatter(IEnumerable<string> mediaTypes) : this()
     {
-        base.SupportedMediaTypes.Add(mediaType);
+        foreach (var type in mediaTypes)
+        {
+            base.SupportedMediaTypes.Add(type);
+        }
     }
 
 

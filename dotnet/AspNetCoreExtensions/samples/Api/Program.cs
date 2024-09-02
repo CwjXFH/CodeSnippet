@@ -8,9 +8,9 @@ builder.AddProtobufFormatters(opt =>
 {
     opt.InputFormatters.Clear();
     opt.OutputFormatters.Clear();
-    
+
     opt.InputFormatters.Add(new ProtobufInputFormatter());
-    opt.InputFormatters.Add(new ProtobufJsonInputFormatter("application/json"));
+    opt.InputFormatters.Add(new ProtobufJsonInputFormatter(["application/json", "application/x-json"]));
 
     opt.OutputFormatters.Add(new ProtobufOutputFormatter());
     opt.OutputFormatters.Add(new ProtobufJsonOutputFormatter());

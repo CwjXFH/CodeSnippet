@@ -15,10 +15,13 @@ public class ProtobufJsonOutputFormatter : TextOutputFormatter
         base.SupportedEncodings.Add(Encoding.Unicode);
         base.SupportedMediaTypes.Add(HttpContentType.Application.ProtobufJson);
     }
-
-    public ProtobufJsonOutputFormatter(string mediaType) : this()
+    
+    public ProtobufJsonOutputFormatter(IEnumerable<string> mediaTypes) : this()
     {
-        base.SupportedMediaTypes.Add(mediaType);
+        foreach (var type in mediaTypes)
+        {
+            base.SupportedMediaTypes.Add(type);
+        }
     }
 
 
