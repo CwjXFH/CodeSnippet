@@ -19,6 +19,7 @@ public static class ProtobufJsonFormatter
 
 
     internal static IReadOnlyDictionary<string, MessageDescriptor> TypeMessageDescriptorMap => TypeMsgDescriptorMap;
+
     /// <summary>
     /// Register <see cref="MessageDescriptor"/> into <see cref="JsonFormatter"/> ，used to convert <see cref="IMessage"/> to JSON format
     /// </summary>

@@ -28,7 +28,7 @@ public class ProtobufOutputFormatter : TextOutputFormatter
     {
         var httpContext = context.HttpContext;
         var selectedUtf8 = selectedEncoding.CodePage == Encoding.UTF8.CodePage;
-        var buffer = context.Object is IMessage message ? message.ToByteArray() : Array.Empty<byte>();
+        var buffer = context.Object is IMessage message ? message.ToByteArray() : [];
 
         if (selectedUtf8)
         {
