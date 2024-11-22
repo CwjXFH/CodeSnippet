@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<InfoDbContext>(opt =>
 {
-    opt.UseSqlServer("Server=localhost;Database=Demo;User ID=sa;Password=Docker2022!;Trusted_Connection=SSPI;Integrated Security=false;Encrypt=false;TrustServerCertificate=true");
+    opt.UseSqlServer("Server=localhost;Database=Demo;User ID=sa;Password=MSSQL20241122>;Trusted_Connection=SSPI;Integrated Security=false;Encrypt=false;TrustServerCertificate=true");
 });
 
 #pragma warning disable S125 // Sections of code should not be commented out

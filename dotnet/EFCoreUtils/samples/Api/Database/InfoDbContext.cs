@@ -2,12 +2,7 @@
 
 namespace Api.Database;
 
-public class InfoDbContext : DbContext
+public class InfoDbContext(DbContextOptions<InfoDbContext> options) : DbContext(options)
 {
-    public InfoDbContext(DbContextOptions<InfoDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<InfoEntity> Infos { set; get; }
 }

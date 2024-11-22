@@ -6,19 +6,12 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class InfoController : ControllerBase
+public class InfoController(InfoDbContext dbContext) : ControllerBase
 {
-    private readonly InfoDbContext _dbContext;
-
-    public InfoController(InfoDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Query([FromQuery] string tag)
     {
-        var dbResult = await _dbContext.Infos
+        var dbResult = await dbContext.Infos
             .AsNoTracking()
             .OrderBy(x => x.Id)
             .ToListAsync();
@@ -28,8 +21,8 @@ public class InfoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]InfoEntity info)
     {
-        _dbContext.Infos.Add(info);
-        await _dbContext.SaveChangesAsync();
+        dbContext.Infos.Add(info);
+        await dbContext.SaveChangesAsync();
         return Ok();
     }
 }
