@@ -5,12 +5,7 @@ namespace MemoryCache.Test;
 
 public class MemoryCacheExtensionsTest
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public MemoryCacheExtensionsTest()
-    {
-        _serviceProvider = new ServiceCollection().AddMemoryCache().BuildServiceProvider();
-    }
+    private readonly IServiceProvider _serviceProvider = new ServiceCollection().AddMemoryCache().BuildServiceProvider();
 
     #region KeyCount
 
@@ -44,7 +39,7 @@ public class MemoryCacheExtensionsTest
 
     #endregion
 
-    #region GetKeys
+    #region GetAllKeys
 
     [Fact]
     public void GetAllKeys_HasItems_ReturnTrue()
@@ -56,7 +51,7 @@ public class MemoryCacheExtensionsTest
 
         var keys = memoryCache.GetAllKeys();
 
-        Assert.Equal(key, keys.First().Key);
+        Assert.Equal(key, keys.First());
     }
 
     [Fact]
@@ -70,46 +65,36 @@ public class MemoryCacheExtensionsTest
         Assert.Empty(keys);
     }
 
+    #endregion
+
+    #region ScanKeys
+
     [Fact]
-    public void GetAllKeys_HasItemWithoutExpire_ReturnTrue()
+    public void ScanKeys_Empty_ReturnTrue()
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+
+        var keys = memoryCache.ScanKeys();
+
+        Assert.Empty(keys);
+    }
+
+    [Fact]
+    public void ScanKeys_HasOneItem_ReturnTrue()
     {
         using var scope = _serviceProvider.CreateScope();
         var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
         const string key = "key";
         memoryCache.Set(key, 1);
 
-        var keys = memoryCache.GetAllKeys();
+        var keys = memoryCache.ScanKeys();
 
-        Assert.Null(keys.First().Value);
+        Assert.Equal(key, keys[0].ToString());
     }
 
     [Fact]
-    public void GetAllKeys_HasItemWithExpire_ReturnTrue()
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-        const string key = "key";
-        memoryCache.Set(key, 1, TimeSpan.FromSeconds(1));
-
-        var keys = memoryCache.GetAllKeys();
-
-        Assert.NotNull(keys.First().Value);
-    }
-
-
-    [Fact]
-    public void GetKeys_Empty_ReturnTrue()
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-
-        var keys = memoryCache.GetKeys(10);
-
-        Assert.Empty(keys);
-    }
-
-    [Fact]
-    public void GetKeys_HasItems_ReturnTrue()
+    public void ScanKeys_HasItems_ReturnTrue()
     {
         using var scope = _serviceProvider.CreateScope();
         var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
@@ -118,53 +103,9 @@ public class MemoryCacheExtensionsTest
             memoryCache.Set(i, i);
         }
 
-        const int takeCount = 3;
-        var keys = memoryCache.GetKeys(takeCount);
+        var keys = memoryCache.ScanKeys();
 
-        Assert.Equal(takeCount, keys.Count);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public void GetKeys_InputInvalidValue_ReturnTrue(int takeCount)
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-        for (var i = 0; i < 10; i++)
-        {
-            memoryCache.Set(i, i);
-        }
-
-        var keys = memoryCache.GetKeys(takeCount);
-
-        Assert.Empty(keys);
-    }
-
-    [Fact]
-    public void GetKeys_HasItemWithoutExpire_ReturnTrue()
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-        const string key = "key";
-        memoryCache.Set(key, 1);
-
-        var keys = memoryCache.GetKeys(1);
-
-        Assert.Null(keys.First().Value);
-    }
-
-    [Fact]
-    public void GetKeys_HasItemWithExpire_ReturnTrue()
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
-        const string key = "key";
-        memoryCache.Set(key, 1, TimeSpan.FromSeconds(1));
-
-        var keys = memoryCache.GetKeys(1);
-
-        Assert.NotNull(keys.First().Value);
+        Assert.True(keys is { Count: > 0 });
     }
 
     #endregion

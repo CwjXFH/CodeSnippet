@@ -1,86 +1,53 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using System.Collections;
-using System.Reflection;
+using MSCache = Microsoft.Extensions.Caching.Memory;
 
 namespace MemoryCache;
 
 public static class MemoryCacheExtensions
 {
-    private static MemoryCacheVersion _cacheVersion = MemoryCacheVersion.None;
-
     /// <summary>
     /// Get the number of keys that are stored in the memory.
     /// </summary>
     /// <returns>-1 if failed, else the number of keys</returns>
     public static int KeyCount(this IMemoryCache memoryCache)
     {
-        if (memoryCache.GetType().GetProperty("Count", BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
-                ?.GetValue(memoryCache) is int count)
+        if (memoryCache is MSCache.MemoryCache cache)
         {
-            return count;
+            return cache.Count;
         }
 
         return -1;
     }
 
     /// <summary>
-    /// Return all memory cache keys, and expired time if it exists.
+    /// Return all memory cache keys
     /// </summary>
-    public static IDictionary<object, DateTimeOffset?> GetAllKeys(this IMemoryCache memoryCache)
-    {
-        var keyCount = memoryCache.KeyCount();
-        return memoryCache.GetKeys(keyCount);
-    }
-
+    public static IEnumerable<object> GetAllKeys(this IMemoryCache memoryCache)
+        => memoryCache is not MSCache.MemoryCache cache ? [] : cache.Keys;
+    
     /// <summary>
-    /// Return specified count memory cache keys, and expired time if it exists.
+    /// Random return some keys
     /// </summary>
-    public static IDictionary<object, DateTimeOffset?> GetKeys(this IMemoryCache memoryCache, int count)
+    public static IReadOnlyList<object> ScanKeys(this IMemoryCache memoryCache)
     {
-        if (count <= 0)
+        if (memoryCache is not MSCache.MemoryCache cache)
         {
-            return new Dictionary<object, DateTimeOffset?>();
+            return [];
         }
 
-        var instanceType = memoryCache.GetType();
-        object? entriesCollection = null;
-        var typeVersion = GetMemoryCacheVersion(instanceType);
-#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-        if (typeVersion == MemoryCacheVersion.V6)
+        var keyCount = cache.Count;
+        if (keyCount <= 0)
         {
-            entriesCollection = instanceType.GetProperty("EntriesCollection",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(memoryCache);
-        }
-        else if (typeVersion is MemoryCacheVersion.V7 or MemoryCacheVersion.V8)
-        {
-            var coherentState = instanceType.GetField("_coherentState",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField)?.GetValue(memoryCache);
-            entriesCollection = coherentState?.GetType().GetProperty("EntriesCollection",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty)?.GetValue(coherentState);
-        }
-#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-
-        if (entriesCollection is not IDictionary cacheDict)
-        {
-            return new Dictionary<object, DateTimeOffset?>(0);
+            return [];
         }
 
-        var keyInfoDict = new Dictionary<object, DateTimeOffset?>();
-        foreach (DictionaryEntry cache in cacheDict)
-        {
-            if (cache.Value is not ICacheEntry cacheEntry)
-            {
-                continue;
-            }
+        var random = new Random();
+        var startIndex = random.Next(0, keyCount);
+        const int maxKeyCount = 30;
+        var maxIndex = Math.Min(startIndex + 1 + maxKeyCount, keyCount + 1);
+        var endIndex = random.Next(startIndex + 1, maxIndex);
 
-            keyInfoDict[cacheEntry.Key] = cacheEntry.AbsoluteExpiration;
-            if (keyInfoDict.Keys.Count >= count)
-            {
-                break;
-            }
-        }
-
-        return keyInfoDict;
+        return cache.Keys.Skip(startIndex).Take(endIndex - startIndex).ToList();
     }
 
     /// <summary>
@@ -104,33 +71,9 @@ public static class MemoryCacheExtensions
             percent = 1;
         }
 
-        var compact = memoryCache.GetType()
-            .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
-            .Where(m => m.Name == "Compact")
-            .FirstOrDefault(m => m.GetParameters().Length == 1);
-        compact?.Invoke(memoryCache, [percent]);
-    }
-
-    private static MemoryCacheVersion GetMemoryCacheVersion(Type type)
-    {
-        if (_cacheVersion != MemoryCacheVersion.None)
+        if (memoryCache is MSCache.MemoryCache cache)
         {
-            return _cacheVersion;
+            cache.Compact(percent);
         }
-
-        var assemblyFullName = type.Assembly.FullName;
-        if (string.IsNullOrWhiteSpace(assemblyFullName))
-        {
-            throw new ArgumentException(nameof(type));
-        }
-
-#pragma warning disable S3358 // Ternary operators should not be nested
-        _cacheVersion = assemblyFullName.Contains("Version=6.") ? MemoryCacheVersion.V6 :
-            assemblyFullName.Contains("Version=7.") ? MemoryCacheVersion.V7 :
-            assemblyFullName.Contains("Version=8.") ? MemoryCacheVersion.V8 :
-            throw new NotSupportedException();
-#pragma warning restore S3358 // Ternary operators should not be nested
-
-        return _cacheVersion;
     }
 }
