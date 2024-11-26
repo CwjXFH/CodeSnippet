@@ -1,21 +1,21 @@
 ## 2.0.0
 
-**Date:** 2024-02-20
+**Date:** 2024-11-26
 
 ### What's new
 
 Support .NET 9
 
 Add APIs:  
-+ IEnumerable<object> GetAllKeys  
-+ IReadOnlyList<object> ScanKeys  
++ `IEnumerable<object> GetAllKeys`  
++ `IReadOnlyList<object> ScanKeys`  
 
 
 ### Breaking changes
 
 Remove APIs:
- + IDictionary<object, DateTimeOffset?> GetAllKeys  
- + IDictionary<object, DateTimeOffset?> GetKeys
+ + `IDictionary<object, DateTimeOffset?> GetAllKeys`  
+ + `IDictionary<object, DateTimeOffset?> GetKeys`
 
 
 
