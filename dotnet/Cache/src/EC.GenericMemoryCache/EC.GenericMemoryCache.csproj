@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>EC.Net.Extensions.MemoryCache</PackageId>
-    <Version>2.0.0</Version>
+    <PackageId>Net.Generic.MemoryCache</PackageId>
+    <Version>0.1.0</Version>
     <Authors>WenJun Chi</Authors>
-    <Description>Extension methods for MemoryCache, which implements IMemoryCache interface.</Description>
-    <PackageTags>.NET;MemoryCache</PackageTags>
+    <Description>Generic memory cache component, supports generic cache key.</Description>
+    <PackageTags>.NET;Generic;MemoryCache</PackageTags>
     <RepositoryUrl>https://github.com/CwjXFH/CodeSnippet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,18 +15,18 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <PackageOutputPath>../../pkgs</PackageOutputPath>
-    <RootNamespace>MemoryCache</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.2" />
+  </ItemGroup>
 
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.2" />
   </ItemGroup>
 
 </Project>
