@@ -19,7 +19,7 @@ internal sealed class GenericMemoryCache<TKey, TValue>(IOptions<GenericMemoryCac
 
     public void Set(TKey key, TValue value, TimeSpan? expire)
     {
-        _cache[key] = new CacheEntry<TValue> { Value = value, Expire = expire, TimeProvider = options.Value.TimeProvider };
+        _cache[key] = new CacheEntry<TValue> { Value = value, Expire = expire, TimeProvider = _options.TimeProvider };
     }
 
     public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
@@ -45,7 +45,7 @@ internal sealed class GenericMemoryCache<TKey, TValue>(IOptions<GenericMemoryCac
 
     private void StartScanForExpiredItemsIfNeeded()
     {
-        var now = options.Value.TimeProvider.GetUtcNow();
+        var now = _options.TimeProvider.GetUtcNow();
         if (now - _lastClearTime > _options.ExpirationScanFrequency)
         {
             ScheduleTask(now);
