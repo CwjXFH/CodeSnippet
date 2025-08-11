@@ -42,6 +42,19 @@ internal sealed class GenericMemoryCache<TKey, TValue>(IOptions<GenericMemoryCac
         return true;
     }
 
+    public bool TryRemove(TKey key, [MaybeNullWhen(false)] out TValue value)
+    {
+        value = default;
+        var removeResult = _cache.TryRemove(key, out var cacheValue);
+
+        if (removeResult)
+        {
+            value = cacheValue!.Value;
+        }
+
+        return removeResult;
+    }
+
 
     private void StartScanForExpiredItemsIfNeeded()
     {

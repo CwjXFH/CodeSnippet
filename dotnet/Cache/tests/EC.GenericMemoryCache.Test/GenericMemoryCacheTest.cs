@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Time.Testing;
 
@@ -30,6 +30,31 @@ public class GenericMemoryCacheTest(GenericMemoryCacheFixture fixture) : IClassF
         var exists = cache.TryGetValue(cacheKey, out _);
 
         Assert.False(exists);
+    }
+
+    [Fact]
+    public void Remove_ExistKey_ReturnTrue()
+    {
+        const string initCacheVal = "100";
+        var cacheKey = new CacheKey { Value = 100 };
+        var cache = fixture.Services.GetRequiredService<IGenericMemoryCache<CacheKey, string>>();
+        cache.Set(cacheKey, initCacheVal, null);
+
+        var exists = cache.TryRemove(cacheKey, out var cacheVal);
+
+        Assert.True(exists && cacheVal == initCacheVal);
+    }
+
+    [Fact]
+    public void Remove_NotExistKey_ReturnFalse()
+    {
+        var cacheKey = new CacheKey { Value = 100 };
+        var cache = fixture.Services.GetRequiredService<IGenericMemoryCache<CacheKey, string>>();
+
+        var exists = cache.TryRemove(cacheKey, out var value);
+
+        Assert.False(exists);
+        Assert.Null(value);
     }
 }
 
