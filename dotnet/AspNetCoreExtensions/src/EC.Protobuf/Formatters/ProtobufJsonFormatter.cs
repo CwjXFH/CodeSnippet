@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using EC.Protobuf.Exceptions;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
@@ -46,7 +46,7 @@ public static class ProtobufJsonFormatter
     }
 
 
-    private static IList<MessageDescriptor> RegistryMessageDescriptorCore(Assembly assembly)
+    private static IReadOnlyList<MessageDescriptor> RegistryMessageDescriptorCore(Assembly assembly)
     {
         var messageTypes = assembly.GetTypes()
             .Where(t => t.IsAbstract == false)

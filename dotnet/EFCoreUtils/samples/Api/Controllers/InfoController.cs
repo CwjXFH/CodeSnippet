@@ -9,7 +9,7 @@ namespace Api.Controllers;
 public class InfoController(InfoDbContext dbContext) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Query([FromQuery] string tag)
+    public async Task<IActionResult> Query()
     {
         var dbResult = await dbContext.Infos
             .AsNoTracking()

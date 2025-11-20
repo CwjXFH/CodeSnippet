@@ -44,15 +44,14 @@ internal sealed class GenericMemoryCache<TKey, TValue>(IOptions<GenericMemoryCac
 
     public bool TryRemove(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
-        value = default;
-        var removeResult = _cache.TryRemove(key, out var cacheValue);
-
-        if (removeResult)
+        if (_cache.TryRemove(key, out var cacheValue))
         {
-            value = cacheValue!.Value;
+            value = cacheValue.Value;
+            return true;
         }
 
-        return removeResult;
+        value = default;
+        return false;
     }
 
 

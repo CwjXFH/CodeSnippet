@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using MSCache = Microsoft.Extensions.Caching.Memory;
 
 namespace MemoryCache;

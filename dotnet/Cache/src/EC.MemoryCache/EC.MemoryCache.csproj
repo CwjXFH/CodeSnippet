@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>EC.Net.Extensions.MemoryCache</PackageId>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
     <Authors>WenJun Chi</Authors>
     <Description>Extension methods for MemoryCache, which implements IMemoryCache interface.</Description>
     <PackageTags>.NET;MemoryCache</PackageTags>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0" />
   </ItemGroup>
 
 </Project>
