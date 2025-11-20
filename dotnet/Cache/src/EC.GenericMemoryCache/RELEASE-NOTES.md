@@ -1,4 +1,13 @@
-﻿## 0.2.0
+﻿## 1.0.0
+
+**Date:** 2025-11-20
+
+### What's new
+
+- Support .NET 10
+- Fix CacheEntry creation time initialization.
+
+## 0.2.0
 
 **Date:** 2025-08-25
 
