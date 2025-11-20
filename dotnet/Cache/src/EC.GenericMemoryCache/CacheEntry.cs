@@ -2,9 +2,17 @@ namespace EC.GenericMemoryCache;
 
 internal class CacheEntry<TValue>
 {
-    private readonly DateTimeOffset _createTime = DateTimeOffset.UtcNow;
+    private DateTimeOffset _createTime;
 
-    public required TimeProvider TimeProvider { init; get; }
+    public required TimeProvider TimeProvider
+    {
+        init
+        {
+            field = value;
+            _createTime = field.GetUtcNow();
+        }
+        get;
+    }
 
     public TimeSpan? Expire { init; get; }
 

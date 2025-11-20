@@ -77,14 +77,19 @@ internal sealed class GenericMemoryCache<TKey, TValue>(IOptions<GenericMemoryCac
             return;
         }
 
-        foreach (var (key, cacheEntry) in _cache)
+        try
         {
-            if (cacheEntry.Expired)
+            foreach (var (key, cacheEntry) in _cache)
             {
-                _cache.TryRemove(key, out _);
+                if (cacheEntry.Expired)
+                {
+                    _cache.TryRemove(key, out _);
+                }
             }
         }
-
-        Interlocked.Exchange(ref _clearCacheTag, ClearTagIdle);
+        finally
+        {
+            Interlocked.Exchange(ref _clearCacheTag, ClearTagIdle);
+        }
     }
 }
