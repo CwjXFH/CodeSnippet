@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -57,19 +57,27 @@ internal class SlowQueryObserver(ILogger logger, EFCoreSlowQueryOptions options)
     private void RecordSlowQueryLog(CommandExecutedEventData eventData)
     {
         const string msg = "[EFCoreSlowQuery] duration: {Duration}ms, service: {Service}, SQL: {SQL}";
-        logger.Log(options.LogLevel, msg, eventData.Duration.Milliseconds, options.ServiceName, eventData.Command.CommandText);
+        if (logger.IsEnabled(options.LogLevel))
+        {
+            logger.Log(options.LogLevel, msg,
+                eventData.Duration.Milliseconds, options.ServiceName, eventData.Command.CommandText);
+        }
     }
 
     private void RecordErrorCommand(object? value)
     {
         if (value is CommandErrorEventData errorEventData)
         {
-            logger.LogError(errorEventData.Exception, "Exec SQL error, SQL: {SQL}", errorEventData.Command.CommandText);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(errorEventData.Exception, "Exec SQL error, SQL: {SQL}",
+                    errorEventData.Command.CommandText);
+            }
+
+            return;
         }
-        else
-        {
-            logger.LogError("Exec SQL error, and no SQL is captured.");
-        }
+
+        logger.LogError("Exec SQL error, and no SQL is captured.");
     }
 
     #endregion

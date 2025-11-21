@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <PackageId>WJChi.Net.EFCoreSlowQuery</PackageId>
-        <Version>3.0.0</Version>
+        <Version>4.0.0</Version>
         <Authors>WenJun Chi</Authors>
         <Description>A middleware used for log EFCore slow query.</Description>
         <PackageTags>EFCore;SlowQuery</PackageTags>

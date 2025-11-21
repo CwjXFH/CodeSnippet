@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<InfoDbContext>(opt =>
 {
-    opt.UseSqlServer("Server=localhost;Database=Demo;User ID=sa;Password=MSSQL20241122>;Trusted_Connection=SSPI;Integrated Security=false;Encrypt=false;TrustServerCertificate=true");
+    opt.UseSqlServer(
+        "Server=127.0.0.1;Database=Demo;User ID=sa;Password=MSSql#2025!;Trusted_Connection=SSPI;Integrated Security=false;Encrypt=false;TrustServerCertificate=true");
 });
 
 #pragma warning disable S125 // Sections of code should not be commented out
@@ -27,7 +28,7 @@ app.UseEFCoreSlowQuery(opt =>
 {
     opt.ServiceName = "DemoApi2";
     opt.SlowQueryThresholdMilliseconds = 10;
-    opt.LogLevel = LogLevel.Error;
+    opt.LogLevel = LogLevel.Warning;
 });
 
 app.MapControllers();

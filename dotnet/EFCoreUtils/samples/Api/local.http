@@ -1,3 +1,13 @@
 @base_url=http://localhost:51170
 
+###
 GET {{base_url}}/info?tag=123
+
+###
+POST {{base_url}}/info
+Content-Type: application/json
+
+{
+    "id": 1,
+    "tag": "123"
+}
