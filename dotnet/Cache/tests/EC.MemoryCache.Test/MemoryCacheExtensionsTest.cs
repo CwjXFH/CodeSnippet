@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MemoryCache.Test;
@@ -19,7 +19,6 @@ public class MemoryCacheExtensionsTest
         {
             memoryCache.Set($"{i}", i);
         }
-
 
         var keyCount = memoryCache.KeyCount();
 
