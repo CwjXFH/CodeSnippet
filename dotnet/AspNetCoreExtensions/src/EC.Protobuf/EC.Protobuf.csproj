@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <PackageId>AspNetCore.Extensions.Protobuf</PackageId>
-        <Version>2.0.0</Version>
+        <Version>3.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>WenJun Chi</Authors>
         <Description>ASP.NET Core Protobuf formatter</Description>
