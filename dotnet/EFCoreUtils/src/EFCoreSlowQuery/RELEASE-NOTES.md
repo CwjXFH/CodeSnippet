@@ -1,3 +1,9 @@
+### 4.0.2
+
+**Date:** 2026-02-12
+
++ Fix: use `Duration.TotalMilliseconds` instead of `Duration.Milliseconds` to avoid overflow.
+
 ### 4.0.0
 
 **Date:** 2025-11-21
