@@ -39,7 +39,7 @@ internal class SlowQueryObserver(ILogger logger, EFCoreSlowQueryOptions options)
     {
         if (value.Key == RelationalEventId.CommandExecuted.Name
             && value.Value is CommandExecutedEventData eventData
-            && eventData.Duration.Milliseconds > options.SlowQueryThresholdMilliseconds)
+            && eventData.Duration.TotalMilliseconds > options.SlowQueryThresholdMilliseconds)
         {
             if (options.RecordSlowQueryLog)
             {
@@ -60,7 +60,7 @@ internal class SlowQueryObserver(ILogger logger, EFCoreSlowQueryOptions options)
         if (logger.IsEnabled(options.LogLevel))
         {
             logger.Log(options.LogLevel, msg,
-                eventData.Duration.Milliseconds, options.ServiceName, eventData.Command.CommandText);
+                eventData.Duration.TotalMilliseconds, options.ServiceName, eventData.Command.CommandText);
         }
     }
 
