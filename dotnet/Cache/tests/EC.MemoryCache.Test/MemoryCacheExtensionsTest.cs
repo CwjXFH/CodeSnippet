@@ -36,6 +36,16 @@ public class MemoryCacheExtensionsTest
         Assert.Equal(0, keyCount);
     }
 
+    [Fact]
+    public void KeyCount_NotMemoryCache_ReturnMinusOne()
+    {
+        IMemoryCache memoryCache = new FakeMemoryCache();
+
+        var keyCount = memoryCache.KeyCount();
+
+        Assert.Equal(-1, keyCount);
+    }
+
     #endregion
 
     #region GetAllKeys
@@ -58,6 +68,16 @@ public class MemoryCacheExtensionsTest
     {
         using var scope = _serviceProvider.CreateScope();
         var memoryCache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+
+        var keys = memoryCache.GetAllKeys();
+
+        Assert.Empty(keys);
+    }
+
+    [Fact]
+    public void GetAllKeys_NotMemoryCache_ReturnEmpty()
+    {
+        IMemoryCache memoryCache = new FakeMemoryCache();
 
         var keys = memoryCache.GetAllKeys();
 
@@ -105,6 +125,16 @@ public class MemoryCacheExtensionsTest
         var keys = memoryCache.ScanKeys();
 
         Assert.True(keys is { Count: > 0 });
+    }
+
+    [Fact]
+    public void ScanKeys_NotMemoryCache_ReturnEmpty()
+    {
+        IMemoryCache memoryCache = new FakeMemoryCache();
+
+        var keys = memoryCache.ScanKeys();
+
+        Assert.Empty(keys);
     }
 
     #endregion
@@ -177,10 +207,27 @@ public class MemoryCacheExtensionsTest
         const double percent = 0.3;
         memoryCache.Clear(percent);
         var count = memoryCache.KeyCount();
-        const double excepted = keyCount * (1 - percent);
+        const double expected = keyCount * (1 - percent);
 
-        Assert.True(excepted >= count);
+        Assert.True(expected >= count);
     }
 
     #endregion
+}
+
+sealed file class FakeMemoryCache : IMemoryCache
+{
+    public ICacheEntry CreateEntry(object key) => throw new NotImplementedException();
+
+    public void Dispose() { }
+
+    public void Remove(object key) => throw new NotImplementedException();
+
+    public bool TryGetValue(object key, out object? value)
+    {
+        value = null;
+        return false;
+    }
+
+    public MemoryCacheStatistics? GetCurrentStatistics() => null;
 }
